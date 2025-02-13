@@ -17,7 +17,7 @@ public class UserResponseDTO {
     private String lastName;
     private String email;
     private String password;
-    private Enum<Role> role;
+    private Role role;
     private int grade;
     private Date birthDay;
     private Date enrollementDate;

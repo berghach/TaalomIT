@@ -11,7 +11,7 @@ public record UserRequestDTO(
      String lastName,
      String email,
      String password,
-     Enum<Role> role,
+     Role role,
      int grade,
      Date birthDay,
      Date enrollementDate
