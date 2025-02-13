@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -25,19 +26,19 @@ public class User implements UserDetails {
     private String lastName;
     private String email;
     private String password;
-    private Enum<Role> role;
+    private Role role;
     private int grade;
     private Date birthDay;
     private Date enrollementDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return email;
     }
 
     @Override
