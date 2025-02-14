@@ -27,6 +27,12 @@ public class UserService {
         return Optional.of(userResponseDTO);
     }
 
+    public Optional<UserResponseDTO> getByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User with email " + email + " not found"));
+        return Optional.of(userMapper.toResponseDTO(user));
+    }
+
 
     public List<UserResponseDTO> getAll() {
         List<User> users = userRepository.findAll();
