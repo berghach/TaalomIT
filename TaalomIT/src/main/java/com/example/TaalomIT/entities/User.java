@@ -21,7 +21,7 @@ import java.util.UUID;
 @Document(collection = "user")
 public class User implements UserDetails {
     @Id
-    private UUID id;
+    private String id;
     private String firstName;
     private String lastName;
     private String email;

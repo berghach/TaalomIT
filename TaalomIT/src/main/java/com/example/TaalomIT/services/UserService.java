@@ -20,7 +20,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public Optional<UserResponseDTO> get(UUID id) {
+    public Optional<UserResponseDTO> get(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User with ID " + id + " not found"));
         UserResponseDTO userResponseDTO = userMapper.toResponseDTO(user);
@@ -35,18 +35,14 @@ public class UserService {
 
 
     public UserResponseDTO save(UserRequestDTO reqEntity) {
-        System.out.println("Mapping.....");
         User mappedUser = userMapper.toEntity(reqEntity);
-        System.out.println(mappedUser);
-        System.out.println("Inserting...");
         mappedUser.setPassword(passwordEncoder.encode(mappedUser.getPassword()));
         User savedUser = userRepository.insert(mappedUser);
-        System.out.println(savedUser);
         return userMapper.toResponseDTO(savedUser);
     }
 
 
-    public UserResponseDTO update(UserRequestDTO reqEntity, UUID oldId) {
+    public UserResponseDTO update(UserRequestDTO reqEntity, String oldId) {
         User existingUser = userRepository.findById(oldId)
                 .orElseThrow(() -> new RuntimeException("User with ID " + oldId + " not found"));
         User updatedUser = userMapper.toEntity(reqEntity);
@@ -57,7 +53,7 @@ public class UserService {
     }
 
 
-    public boolean delete(UUID oldId) throws Exception {
+    public boolean delete(String oldId) throws Exception {
         User existingUser = userRepository.findById(oldId)
                 .orElseThrow(() -> new Exception("User with ID " + oldId + " not found"));
         userRepository.delete(existingUser);
