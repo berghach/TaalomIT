@@ -19,7 +19,7 @@ A web application for digitalizing school management. This platform facilitates 
 
 - **Back-End**:  
   - Java (Spring Boot, Spring Data, Spring Security, Spring MVC)
-  - PostgreSQL database 
+  - MongoDB database 
 - **Front-End**:  
   - Angular Framework
   - Tailwind CSS (optional for styling)
@@ -38,7 +38,7 @@ A web application for digitalizing school management. This platform facilitates 
 
 - Install **Node.js** and **Angular CLI**.
 - Install **Java JDK 17** or above.
-- Install **PostgreSQL**.
+- Install **MongoDB**.
 - Ensure **Maven** is installed.
 
 ### Installation Steps
