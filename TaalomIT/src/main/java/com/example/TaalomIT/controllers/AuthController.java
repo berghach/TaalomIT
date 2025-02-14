@@ -4,6 +4,7 @@ import com.example.TaalomIT.dtos.request.AuthRequest;
 import com.example.TaalomIT.dtos.request.UserRequestDTO;
 import com.example.TaalomIT.dtos.response.UserResponseDTO;
 import com.example.TaalomIT.entities.User;
+import com.example.TaalomIT.security.JwtUtil;
 import com.example.TaalomIT.services.UserService;
 import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ import java.util.Map;
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody UserRequestDTO reqEntity){
@@ -41,10 +42,20 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody AuthRequest authRequest){
+    public ResponseEntity<Map<String, Object>> login(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.email(), authRequest.password()));
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return "Login successful";
+
+        User user = (User) authentication.getPrincipal();
+
+        String token = jwtUtil.generateToken(user.getEmail());
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", "Login successful");
+        responseBody.put("token", token);
+
+        return ResponseEntity.ok(responseBody);
     }
 }
