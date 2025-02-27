@@ -2,8 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '../auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { Store } from '@ngrx/store';
+import { login } from '../store/auth.actions';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private store: Store,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
@@ -32,18 +33,7 @@ export class LoginComponent {
     });
   }
   onSubmit() {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      this.authService.login(email, password).subscribe({
-        next: (response) => {
-          // Store token on successful login
-          this.authService.storeToken(response.token);
-          this.router.navigate(['/dashboard']); // redirect to dashboard or home page
-        },
-        error: (err) => {
-          this.errorMessage = 'Invalid credentials. Please try again.';
-        }
-      });
-    }
+   this.store.dispatch(login(this.loginForm.value));
+   this.router.navigate(['/dashboard']);
   }
 }
