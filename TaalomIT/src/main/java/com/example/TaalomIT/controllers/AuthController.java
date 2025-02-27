@@ -23,7 +23,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-//@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationManager authenticationManager;
@@ -53,6 +52,7 @@ public class AuthController {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("message", "Login successful");
         responseBody.put("token", token);
+        responseBody.put("user", userService.getByEmail(user.getEmail()));
 
         return ResponseEntity.ok(responseBody);
     }
