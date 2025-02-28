@@ -1,3 +1,5 @@
+import { Role } from "./roles";
+
 export interface AuthRequest {
     email: string;
     password: string;
@@ -11,8 +13,12 @@ export interface AuthRequest {
   
   export interface User {
     id: number;
-    email: string;
     firstName: string;
     lastName: string;
-    role: string;
+    email: string;
+    password: string;
+    role: Role;
+    grade: number;
+    birthDate: string;
+    enrollementDate: string;
   }
