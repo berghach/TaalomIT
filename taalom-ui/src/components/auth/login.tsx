@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useLoginMutation } from "../features/auth/authApi";
+import { useLoginMutation } from "../../features/auth/authApi";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../features/auth/authSlice";
-import { AuthRequest } from "../models/auth";
+import { useNavigate } from 'react-router-dom';
+import { setCredentials } from "../../features/auth/authSlice";
+import { AuthRequest } from "../../models/auth";
 
 const loginSchema = yup.object().shape({
   email: yup.string().email("Invalide email").required("Email is required"),
@@ -14,6 +15,7 @@ const loginSchema = yup.object().shape({
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
 
   const {
@@ -28,10 +30,24 @@ const Login: React.FC = () => {
     try {
       const response = await login(data).unwrap();
       dispatch(setCredentials(response));
-      alert("Login successful!");
+
+      switch (response.user.role) {
+        case "ROLE_ADMIN":
+          navigate("/admin");
+          break;
+        case "ROLE_TEACHER":
+          navigate("/teacher");
+          break;
+        case "ROLE_STUDENT":
+          navigate("/student");
+          break;
+        default:
+          navigate("/dashboard"); // Redirection par défaut
+      }
+      // alert("Login successful!");
     } catch (error) {
       console.error("Login failed", error);
-      alert("Invalid credentials!");
+      // alert("Invalid credentials!");
     }
   };
 
